@@ -200,7 +200,21 @@ function renderModal() {
     </div>
   </div>`;
 
-  const sauceVals = ["ซอสรวม", "มายองเนส", "มะเขือเทศ", "ซอสพริก", "ไม่รับซอส"];
+  const qrHTML = `
+  <div class="section-divider"><span>ชำระเงิน</span></div>
+  <div class="qr-section">
+    <div class="qr-header">💳 ชำระผ่าน PromptPay</div>
+    <div class="qr-body">
+      <img class="qr-img" src="https://promptpay.io/0821088428.png" alt="QR PromptPay 0821088428" onerror="this.style.display='none'">
+      <div class="qr-info">
+        <div class="qr-label">PROMPTPAY</div>
+        <div class="qr-number">0821088428</div>
+        <div class="qr-name">สโมกกี้ไบร์ท</div>
+        <div class="qr-amount">ยอดชำระ: <span class="qr-amount-num">฿${total}</span></div>
+        <div class="qr-hint">📱 สแกนด้วยแอปธนาคาร<br>หรือ Mobile Banking ได้เลยครับ</div>
+      </div>
+    </div>
+  </div>`;
   const sauceIcons = { "ซอสรวม": "🎉", "มายองเนส": "🟡", "มะเขือเทศ": "🍅", "ซอสพริก": "🔴", "ไม่รับซอส": "🚫" };
   const currentSauces = (globalSauce || "ซอสรวม").split("+");
   const sauceBoxes = sauceVals.map(sv => {
@@ -252,7 +266,7 @@ function renderModal() {
     </div>
   </div>`;
 
-  body.innerHTML = itemsHTML + summaryHTML + sauceVegSectionHTML + formHTML;
+  body.innerHTML = itemsHTML + summaryHTML + qrHTML + sauceVegSectionHTML + formHTML;
   document.getElementById("fldHouseNo").addEventListener("input", function () {
     if (this.value.trim()) this.classList.remove("err");
   });
@@ -345,7 +359,6 @@ ${D1}
 ${D1}
 🙏 ขอบคุณที่อุดหนุนสโมกกี้ไบร์ทครับ
    รอยืนยันออเดอร์จากร้านสักครู่นะ 😊
-   📢 แชร์ไปยังกลุ่ม: เดอะมันนี่ รวมร้านอร่อย
 ${D1}`;
 
   window.open("https://line.me/R/msg/text/?" + encodeURIComponent(msg), "_blank");
@@ -409,7 +422,15 @@ function openHowTo() {
 }
 function closeHowTo() {
   document.getElementById("howToBg").classList.remove("open");
+  localStorage.setItem("howto_seen", "1");
 }
+
+/* ── Auto-open howto on first visit ── */
+window.addEventListener("load", () => {
+  if (!localStorage.getItem("howto_seen")) {
+    setTimeout(() => openHowTo(), 600);
+  }
+});
 
 /* ── Toast notification ── */
 function showToast(msg) {

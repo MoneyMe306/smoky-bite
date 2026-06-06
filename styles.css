@@ -206,3 +206,25 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellips
 /* ════ SHARE GROUP BUTTON ════ */
 .btn-share-group{margin:0 0 16px;padding:13px 24px;background:linear-gradient(135deg,#06c755,#04a844);border:none;border-radius:14px;color:white;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;width:100%;max-width:280px;line-height:1.5;transition:opacity 0.2s,transform 0.15s;text-align:center;}
 .btn-share-group:hover{opacity:0.9;transform:scale(0.98);}
+
+/* ════ HOW-TO FAB ════ */
+.howto-fab{position:fixed;left:18px;bottom:90px;width:56px;height:56px;background:linear-gradient(135deg,var(--fire),var(--fire2));border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 5px 18px rgba(255,85,0,0.45);z-index:200;cursor:pointer;transition:transform 0.2s;animation:pulse-o 2.5s infinite;}
+.howto-fab:hover{transform:scale(1.1);}
+@keyframes pulse-o{0%,100%{box-shadow:0 5px 18px rgba(255,85,0,0.45)}50%{box-shadow:0 5px 30px rgba(255,85,0,0.75)}}
+
+/* ════ HOW-TO CLOSE BTN ════ */
+.howto-close-btn{width:auto!important;padding:0 14px!important;height:34px!important;border-radius:20px!important;font-size:13px!important;font-weight:700!important;background:rgba(255,85,0,0.15)!important;border:1px solid rgba(255,85,0,0.35)!important;color:var(--fire2)!important;}
+.howto-close-btn:hover{background:rgba(255,85,0,0.28)!important;color:var(--fire2)!important;}
+
+/* ════ QR SECTION ════ */
+.qr-section{margin:0 16px 8px;background:var(--modal-card);border:1px solid var(--modal-border);border-radius:16px;overflow:hidden;}
+.qr-header{padding:12px 16px;background:rgba(255,215,0,0.07);border-bottom:1px solid var(--modal-border);font-size:12px;font-weight:700;color:var(--gold);letter-spacing:0.04em;display:flex;align-items:center;gap:6px;}
+.qr-body{display:flex;align-items:center;gap:14px;padding:14px 16px;}
+.qr-img{width:100px;height:100px;border-radius:10px;border:2px solid var(--modal-border);background:white;flex-shrink:0;object-fit:contain;}
+.qr-info{flex:1;}
+.qr-label{font-size:10px;font-weight:700;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin-bottom:3px;}
+.qr-number{font-size:20px;font-weight:900;color:var(--text);letter-spacing:0.03em;margin-bottom:1px;}
+.qr-name{font-size:12px;color:var(--muted);margin-bottom:8px;}
+.qr-amount{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;}
+.qr-amount-num{color:var(--gold);font-size:18px;font-weight:900;}
+.qr-hint{font-size:11px;color:var(--muted);line-height:1.6;}

@@ -14,7 +14,6 @@
   <span class="flame">🔥</span>
   <h1>สโมกกี้ไบร์ท<span>ของแทร๊!! 🍢</span></h1>
   <p class="header-sub">พร้อมเสิร์ฟความอร่อยครับ • ส่งไวถึงหน้าบ้าน</p>
-  <button class="btn-howto" onclick="openHowTo()">📖 วิธีกดสั่งสินค้า</button>
 </div>
 
 <!-- ════ PROMO BAR ════ -->
@@ -74,6 +73,9 @@
 <!-- ════ LINE FAB ════ -->
 <a class="line-fab" href="https://line.me/ti/p/~YOUR_LINE_ID" target="_blank">💬</a>
 
+<!-- ════ HOW-TO FAB ════ -->
+<button class="howto-fab" onclick="openHowTo()">📖</button>
+
 <!-- ════ TOAST ════ -->
 <div class="toast" id="toast"></div>
 
@@ -106,7 +108,7 @@
 <script src="main.js"></script>
 
 <!-- ════ HOW-TO POPUP ════ -->
-<div class="modal-bg" id="howToBg" onclick="if(event.target===this)closeHowTo()">
+<div class="modal-bg" id="howToBg">
   <div class="modal howto-modal">
     <div class="modal-head">
       <div class="modal-head-left">
@@ -116,7 +118,7 @@
           <div class="modal-head-sub">ทำตามขั้นตอนง่ายๆ ได้เลยครับ</div>
         </div>
       </div>
-      <button class="modal-close" onclick="closeHowTo()">✕</button>
+      <button class="modal-close howto-close-btn" onclick="closeHowTo()">✕ ปิด</button>
     </div>
     <div class="modal-body howto-body">
       <div class="howto-step">
