@@ -1,3 +1,4 @@
+/* ════ IMAGE MAP ════ */
 const IMG = {
   s1: "https://i.ibb.co/1Y4fr8Pm/1.jpg",
   s2: "https://i.ibb.co/GQkb6htw/2.jpg",
@@ -11,6 +12,7 @@ const IMG = {
   j10: "https://i.ibb.co/zWpcrp1j/10.jpg",
 };
 
+/* ════ MENU DATA ════ */
 const smallMenus = [
   { id: "s1", num: 1, name: "หนังกรอบไก่", price: 7 },
   { id: "s2", num: 2, name: "หนังกรอบหมู", price: 7 },
@@ -27,11 +29,22 @@ const jumboMenus = [
   { id: "j10", num: 10, name: "หนังไก่กรอบ TFG", price: 10 },
 ];
 
+/* ════ SAUCE OPTIONS (FIX: ประกาศ sauceVals ตรงนี้) ════ */
+const sauceVals = ["ซอสรวม", "มายองเนส", "มะเขือเทศ", "ซอสพริก", "ไม่รับซอส"];
+const sauceIcons = {
+  "ซอสรวม": "🎉",
+  "มายองเนส": "🟡",
+  "มะเขือเทศ": "🍅",
+  "ซอสพริก": "🔴",
+  "ไม่รับซอส": "🚫",
+};
+
+/* ════ STATE ════ */
 let cart = [];
 let globalSauce = "ซอสรวม";
 let globalVeg = "🥬 ใส่ผัก";
 
-/* ── Build product card ── */
+/* ════ BUILD PRODUCT CARD ════ */
 function buildCard(m, isJumbo) {
   const promo = isJumbo ? "" : `<div class="card-promo">3 ชิ้น = 20 บาท 🔥</div>`;
   const best = m.tag ? `<div class="best-tag">${m.tag}</div>` : "";
@@ -61,16 +74,18 @@ function buildCard(m, isJumbo) {
 document.getElementById("grid-small").innerHTML = smallMenus.map(m => buildCard(m, false)).join("");
 document.getElementById("grid-jumbo").innerHTML = jumboMenus.map(m => buildCard(m, true)).join("");
 
-/* ── Quantity controls ── */
+/* ════ QUANTITY CONTROLS ════ */
 function chgQty(id, d) {
   const el = document.getElementById(id);
   el.textContent = Math.max(1, Math.min(99, parseInt(el.textContent) + d));
 }
 
-/* ── Sauce handler ── */
+/* ════ SAUCE HANDLER ════ */
 function handleGlobalSauceChange(el) {
   if (el.value === "ไม่รับซอส" && el.checked) {
-    document.querySelectorAll('input[name="gsauce"]').forEach(c => { if (c.value !== "ไม่รับซอส") c.checked = false; });
+    document.querySelectorAll('input[name="gsauce"]').forEach(c => {
+      if (c.value !== "ไม่รับซอส") c.checked = false;
+    });
   } else if (el.checked) {
     const ns = document.querySelector('input[name="gsauce"][value="ไม่รับซอส"]');
     if (ns) ns.checked = false;
@@ -79,12 +94,15 @@ function handleGlobalSauceChange(el) {
   globalSauce = checked.length > 0 ? checked.join("+") : "ซอสรวม";
 }
 
-/* ── Add to cart ── */
+/* ════ ADD TO CART ════ */
 function addToCart(id, name, price) {
   const qty = parseInt(document.getElementById("qty_" + id).textContent);
   const ex = cart.find(c => c.id === id);
-  if (ex) { ex.qty += qty; }
-  else { cart.push({ id, name, price, sauce: "ซอสรวม", veg: "🥬 ใส่ผัก", qty, img: IMG[id] }); }
+  if (ex) {
+    ex.qty += qty;
+  } else {
+    cart.push({ id, name, price, sauce: "ซอสรวม", veg: "🥬 ใส่ผัก", qty, img: IMG[id] });
+  }
   updateCartBar();
   flashBtn(id);
   showToast("✅ เพิ่ม " + name + " x" + qty + " แล้ว!");
@@ -94,10 +112,13 @@ function flashBtn(id) {
   const b = document.getElementById("btn_" + id);
   b.classList.add("added");
   b.textContent = "✅ เพิ่มแล้ว!";
-  setTimeout(() => { b.classList.remove("added"); b.textContent = "+ เพิ่มลงตะกร้า"; }, 1500);
+  setTimeout(() => {
+    b.classList.remove("added");
+    b.textContent = "+ เพิ่มลงตะกร้า";
+  }, 1500);
 }
 
-/* ── Price calculations ── */
+/* ════ PRICE CALCULATIONS ════ */
 function calcPooledSmall() {
   const totalSmallQty = cart.filter(c => c.price === 7).reduce((s, c) => s + c.qty, 0);
   return Math.floor(totalSmallQty / 3) * 20 + (totalSmallQty % 3) * 7;
@@ -112,6 +133,7 @@ function cartGrandTotal() {
 function itemDisplayPrice(c) {
   if (c.price !== 7) return c.price * c.qty;
   const totalSmallQty = cart.filter(x => x.price === 7).reduce((s, x) => s + x.qty, 0);
+  if (totalSmallQty === 0) return 0;
   const pooled = calcPooledSmall();
   return Math.round(pooled * (c.qty / totalSmallQty));
 }
@@ -119,29 +141,41 @@ function itemDisplayPrice(c) {
 function itemTotal(c) { return itemDisplayPrice(c); }
 function totalCount() { return cart.reduce((s, c) => s + c.qty, 0); }
 
-/* ── Cart bar ── */
+/* ════ CART BAR ════ */
 function updateCartBar() {
   const total = cartGrandTotal();
   const count = totalCount();
   document.getElementById("cartCount").textContent = count;
   document.getElementById("cartTotal").textContent = "฿" + total;
-  document.getElementById("cartSummary").textContent = count > 0 ? cart.map(c => c.name + " x" + c.qty).join(", ") : "ยังไม่มีรายการ";
+  document.getElementById("cartSummary").textContent =
+    count > 0 ? cart.map(c => c.name + " x" + c.qty).join(", ") : "ยังไม่มีรายการ";
   const btn = document.getElementById("btnCheckout");
   btn.disabled = count === 0;
   btn.textContent = count > 0 ? "ดูตะกร้า (" + count + ")" : "ดูตะกร้า";
 }
 
-/* ── Modal controls ── */
-function openCart() { renderModal(); document.getElementById("modalBg").classList.add("open"); document.body.style.overflow = "hidden"; }
-function closeCart() { document.getElementById("modalBg").classList.remove("open"); document.body.style.overflow = ""; }
-function closeCartOutside(e) { if (e.target === document.getElementById("modalBg")) closeCart(); }
+/* ════ MODAL CONTROLS ════ */
+function openCart() {
+  renderModal();
+  document.getElementById("modalBg").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+function closeCart() {
+  document.getElementById("modalBg").classList.remove("open");
+  document.body.style.overflow = "";
+}
+function closeCartOutside(e) {
+  if (e.target === document.getElementById("modalBg")) closeCart();
+}
 
-/* ── Render modal ── */
+/* ════ RENDER MODAL (FIX: ย้าย sauceVals / sauceBoxes ให้ประกาศก่อนใช้) ════ */
 function renderModal() {
   const count = totalCount();
   const total = cartGrandTotal();
   const sub = document.getElementById("modalHeadSub");
-  sub.textContent = count > 0 ? count + " รายการ • ยอดรวม ฿" + total : "ยังไม่มีสินค้าในตะกร้า";
+  sub.textContent = count > 0
+    ? count + " รายการ • ยอดรวม ฿" + total
+    : "ยังไม่มีสินค้าในตะกร้า";
   const body = document.getElementById("modalBody");
   const hasItems = cart.length > 0;
   const btnLine = document.getElementById("btnLine");
@@ -156,6 +190,7 @@ function renderModal() {
     return;
   }
 
+  /* ── Cart items ── */
   const itemsHTML = `<div class="cart-items-section">${cart.map((c, i) => `
     <div class="cart-item">
       <img class="ci-img" src="${c.img}" alt="${c.name}">
@@ -174,9 +209,12 @@ function renderModal() {
       </div>
     </div>`).join("")}</div>`;
 
+  /* ── Order summary ── */
   const totalSmallQty = cart.filter(c => c.price === 7).reduce((s, c) => s + c.qty, 0);
   const summaryItems = cart.map(c => {
-    const promoTag = (c.price === 7 && totalSmallQty >= 3) ? `<span class="os-promo-tag">รวมโปร ${Math.floor(totalSmallQty / 3)}×20</span>` : "";
+    const promoTag = (c.price === 7 && totalSmallQty >= 3)
+      ? `<span class="os-promo-tag">รวมโปร ${Math.floor(totalSmallQty / 3)}×20</span>`
+      : "";
     return `<div class="os-item">
       <div class="os-item-left">
         <div class="os-item-name">${c.name}${promoTag}</div>
@@ -200,6 +238,7 @@ function renderModal() {
     </div>
   </div>`;
 
+  /* ── QR Payment ── */
   const qrHTML = `
   <div class="section-divider"><span>ชำระเงิน</span></div>
   <div class="qr-section">
@@ -215,7 +254,8 @@ function renderModal() {
       </div>
     </div>
   </div>`;
-  const sauceIcons = { "ซอสรวม": "🎉", "มายองเนส": "🟡", "มะเขือเทศ": "🍅", "ซอสพริก": "🔴", "ไม่รับซอส": "🚫" };
+
+  /* ── Sauce & Veg (FIX: สร้าง sauceBoxes ก่อนใช้ใน template) ── */
   const currentSauces = (globalSauce || "ซอสรวม").split("+");
   const sauceBoxes = sauceVals.map(sv => {
     const chk = currentSauces.includes(sv) ? "checked" : "";
@@ -241,6 +281,7 @@ function renderModal() {
     </div>
   </div>`;
 
+  /* ── Delivery form ── */
   const formHTML = `
   <div class="section-divider"><span>ที่อยู่จัดส่ง</span></div>
   <div class="delivery-section">
@@ -266,47 +307,68 @@ function renderModal() {
     </div>
   </div>`;
 
+  /* ── Assemble ── */
   body.innerHTML = itemsHTML + summaryHTML + qrHTML + sauceVegSectionHTML + formHTML;
-  document.getElementById("fldHouseNo").addEventListener("input", function () {
-    if (this.value.trim()) this.classList.remove("err");
-  });
+
+  /* ── Live validation ── */
+  const houseNoEl = document.getElementById("fldHouseNo");
+  if (houseNoEl) {
+    houseNoEl.addEventListener("input", function () {
+      if (this.value.trim()) this.classList.remove("err");
+    });
+  }
 }
 
-/* ── Cart item controls ── */
-function cartChg(i, d) { cart[i].qty = Math.max(1, cart[i].qty + d); updateCartBar(); renderModal(); }
-function cartDel(i) { cart.splice(i, 1); updateCartBar(); renderModal(); }
+/* ════ CART ITEM CONTROLS ════ */
+function cartChg(i, d) {
+  cart[i].qty = Math.max(1, cart[i].qty + d);
+  updateCartBar();
+  renderModal();
+}
+function cartDel(i) {
+  cart.splice(i, 1);
+  updateCartBar();
+  renderModal();
+}
 
-/* ── Form validation ── */
+/* ════ FORM VALIDATION ════ */
 function validateForm() {
   const el = document.getElementById("fldHouseNo");
-  if (!el || !el.value.trim()) { if (el) el.classList.add("err"); return false; }
+  if (!el || !el.value.trim()) {
+    if (el) el.classList.add("err");
+    return false;
+  }
   el.classList.remove("err");
   return true;
 }
 
-/* ── Thai date/time ── */
+/* ════ THAI DATE/TIME ════ */
 function getThaiDateTime() {
   const now = new Date();
-  const thDate = now.toLocaleDateString("th-TH", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
-  const thTime = now.toLocaleTimeString("th-TH", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  const thDate = now.toLocaleDateString("th-TH", {
+    weekday: "long", year: "numeric", month: "long", day: "numeric",
+  });
+  const thTime = now.toLocaleTimeString("th-TH", {
+    hour: "2-digit", minute: "2-digit", second: "2-digit",
+  });
   return { date: thDate, time: thTime };
 }
 
-/* ── Generate Order ID ── */
+/* ════ GENERATE ORDER ID ════ */
 function genOrderId() {
   const ts = Date.now().toString(36).toUpperCase().slice(-5);
   const rnd = Math.random().toString(36).substring(2, 5).toUpperCase();
   return "SB-" + ts + rnd;
 }
 
-/* ── Send to LINE ── */
+/* ════ SEND TO LINE ════ */
 function sendToLine() {
   if (cart.length === 0) return;
   if (!validateForm()) { showToast("⚠️ กรุณากรอกบ้านเลขที่"); return; }
 
   const houseNo = document.getElementById("fldHouseNo").value.trim();
-  const soi = document.getElementById("fldSoi").value.trim();
-  const note = (document.getElementById("fldNote") ? document.getElementById("fldNote").value.trim() : "") || "-";
+  const soi = (document.getElementById("fldSoi") || {}).value?.trim() || "";
+  const note = (document.getElementById("fldNote") || {}).value?.trim() || "-";
   const total = cartGrandTotal();
   const count = totalCount();
   const addrLine = soi ? `บ้านเลขที่ ${houseNo}  ซ.${soi}` : `บ้านเลขที่ ${houseNo}`;
@@ -317,7 +379,6 @@ function sendToLine() {
   const D2 = "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄";
 
   const smallQtyTotal = cart.filter(c => c.price === 7).reduce((s, c) => s + c.qty, 0);
-  const jumboQtyTotal = cart.filter(c => c.price !== 7).reduce((s, c) => s + c.qty, 0);
 
   const itemLines = cart.map((c, i) => {
     const sizeTag = c.price === 7 ? "[เล็ก]" : "[จัมโบ้]";
@@ -365,12 +426,11 @@ ${D1}`;
   showSuccess();
 }
 
-/* ── Success screen ── */
+/* ════ SUCCESS SCREEN ════ */
 function showSuccess() {
   const body = document.getElementById("modalBody");
   document.getElementById("btnLine").style.display = "none";
-  const sub = document.getElementById("modalHeadSub");
-  sub.textContent = "ส่งออเดอร์เสร็จแล้ว 🎉";
+  document.getElementById("modalHeadSub").textContent = "ส่งออเดอร์เสร็จแล้ว 🎉";
   body.innerHTML = `<div class="success-screen">
     <div class="success-glow">✅</div>
     <div class="success-title">ส่งออเดอร์เรียบร้อยแล้ว!</div>
@@ -381,24 +441,29 @@ function showSuccess() {
     <div class="success-countdown" id="successCountdown">กลับสู่หน้าหลักใน 5 วินาที...</div>
     <div class="success-bar-wrap"><div class="success-bar" id="successBar"></div></div>
   </div>`;
+
   let sec = 5;
   const bar = document.getElementById("successBar");
   bar.style.transition = "width " + sec + "s linear";
   setTimeout(() => { bar.style.width = "0%"; }, 50);
+
   const timer = setInterval(() => {
     sec--;
     const el = document.getElementById("successCountdown");
     if (el) el.textContent = "กลับสู่หน้าหลักใน " + sec + " วินาที...";
     if (sec <= 0) {
       clearInterval(timer);
-      cart = []; globalSauce = "ซอสรวม"; globalVeg = "🥬 ใส่ผัก";
+      cart = [];
+      globalSauce = "ซอสรวม";
+      globalVeg = "🥬 ใส่ผัก";
       document.getElementById("btnLine").style.display = "";
-      updateCartBar(); closeCart();
+      updateCartBar();
+      closeCart();
     }
   }, 1000);
 }
 
-/* ── Share to group ── */
+/* ════ SHARE TO GROUP ════ */
 function shareToGroup() {
   const { date, time } = getThaiDateTime();
   const total = cartGrandTotal();
@@ -416,23 +481,24 @@ ${D1}
   window.open("https://line.me/R/msg/text/?" + encodeURIComponent(groupMsg), "_blank");
 }
 
-/* ── How-to Popup ── */
+/* ════ HOW-TO POPUP ════ */
 function openHowTo() {
   document.getElementById("howToBg").classList.add("open");
 }
 function closeHowTo() {
   document.getElementById("howToBg").classList.remove("open");
-  localStorage.setItem("howto_seen", "1");
+  /* FIX: safe localStorage สำหรับ iOS Private Mode */
+  try { localStorage.setItem("howto_seen", "1"); } catch (e) { /* ignore */ }
 }
 
-/* ── Auto-open howto on first visit ── */
+/* ════ AUTO-OPEN HOWTO ON FIRST VISIT ════ */
 window.addEventListener("load", () => {
-  if (!localStorage.getItem("howto_seen")) {
-    setTimeout(() => openHowTo(), 600);
-  }
+  let seen = false;
+  try { seen = !!localStorage.getItem("howto_seen"); } catch (e) { /* ignore */ }
+  if (!seen) setTimeout(() => openHowTo(), 600);
 });
 
-/* ── Toast notification ── */
+/* ════ TOAST NOTIFICATION ════ */
 function showToast(msg) {
   const t = document.getElementById("toast");
   t.textContent = msg;
