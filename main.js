@@ -259,7 +259,8 @@ function renderModal() {
       <div class="qr-info">
         <div class="qr-label">PROMPTPAY</div>
         <div class="qr-number">0821088428</div>
-        <div class="qr-name">สโมกกี้ไบร์ท</div>
+        <div class="qr-name">น.ส.พิจิตรา แก้วคำแสน</div>
+          <div class="qr-name">โอนเสร็จแจ้งสลิปลงในกลุ่มเลยจ้า</div>
         <div class="qr-amount">ยอดชำระ: <span class="qr-amount-num">฿${total}</span></div>
         <div class="qr-hint">📱 สแกนด้วยแอปธนาคาร<br>หรือ Mobile Banking ได้เลยครับ</div>
       </div>
