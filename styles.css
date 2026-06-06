@@ -228,3 +228,8 @@ body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellips
 .qr-amount{font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px;}
 .qr-amount-num{color:var(--gold);font-size:18px;font-weight:900;}
 .qr-hint{font-size:11px;color:var(--muted);line-height:1.6;}
+
+/* ════ HOW-TO MODAL POSITION (top) ════ */
+#howToBg.modal-bg{align-items:flex-start;padding-top:0;}
+#howToBg .modal{border-radius:0 0 28px 28px;border-top:none;border-bottom:1px solid rgba(255,120,0,0.35);box-shadow:0 20px 60px rgba(0,0,0,0.7),0 2px 0 rgba(255,100,0,0.25);animation:slideDown 0.38s cubic-bezier(.22,.8,.25,1);}
+@keyframes slideDown{from{transform:translateY(-100%);opacity:0}to{transform:translateY(0);opacity:1}}

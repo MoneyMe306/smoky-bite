@@ -80,15 +80,27 @@ function chgQty(id, d) {
   el.textContent = Math.max(1, Math.min(99, parseInt(el.textContent) + d));
 }
 
-/* ════ SAUCE HANDLER ════ */
+/* ════ SAUCE HANDLER ════
+   กฎ:
+   - "ซอสรวม" และ "ไม่รับซอส" = exclusive (เลือกแล้วยกเลิกทุกตัวอื่น)
+   - ซอสอื่นๆ (มายองเนส / มะเขือเทศ / ซอสพริก) = multi-select ได้
+     แต่ถ้าเลือกซอสอื่นอยู่แล้ว ซอสรวม/ไม่รับซอส จะถูก uncheck ออก
+════ */
 function handleGlobalSauceChange(el) {
-  if (el.value === "ไม่รับซอส" && el.checked) {
-    document.querySelectorAll('input[name="gsauce"]').forEach(c => {
-      if (c.value !== "ไม่รับซอส") c.checked = false;
-    });
-  } else if (el.checked) {
-    const ns = document.querySelector('input[name="gsauce"][value="ไม่รับซอส"]');
-    if (ns) ns.checked = false;
+  const exclusives = ["ซอสรวม", "ไม่รับซอส"];
+  if (el.checked) {
+    if (exclusives.includes(el.value)) {
+      /* เลือก exclusive → uncheck ทุกตัวอื่น */
+      document.querySelectorAll('input[name="gsauce"]').forEach(c => {
+        if (c.value !== el.value) c.checked = false;
+      });
+    } else {
+      /* เลือกซอสปกติ → uncheck exclusive ทั้งหมด */
+      exclusives.forEach(v => {
+        const ex = document.querySelector('input[name="gsauce"][value="' + v + '"]');
+        if (ex) ex.checked = false;
+      });
+    }
   }
   const checked = [...document.querySelectorAll('input[name="gsauce"]:checked')].map(e => e.value);
   globalSauce = checked.length > 0 ? checked.join("+") : "ซอสรวม";
@@ -196,7 +208,6 @@ function renderModal() {
       <img class="ci-img" src="${c.img}" alt="${c.name}">
       <div class="ci-info">
         <div class="ci-name">${c.name}</div>
-        <div class="ci-sauce">${c.sauce} · ${c.veg}</div>
         <div class="ci-controls">
           <button class="ci-qbtn" onclick="cartChg(${i},-1)">−</button>
           <span class="ci-qnum">${c.qty}</span>
