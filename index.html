@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สโมกกี้ไบร์ท 🔥 สั่งได้เลย!</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ════ HEADER ════ -->
+<div class="header">
+  <span class="flame">🔥</span>
+  <h1>สโมกกี้ไบร์ท<span>ของแทร๊!! 🍢</span></h1>
+  <p class="header-sub">พร้อมเสิร์ฟความอร่อยครับ • ส่งไวถึงหน้าบ้าน</p>
+  <button class="btn-howto" onclick="openHowTo()">📖 วิธีกดสั่งสินค้า</button>
+</div>
+
+<!-- ════ PROMO BAR ════ -->
+<div class="promo-bar">
+  <div class="badge"><span>✅</span><span>ชิ้นเล็ก <span class="price">7</span> บาท</span><span class="ptag">3 ชิ้น 20.-</span></div>
+  <div class="badge"><span>✅</span><span>ไซส์จัมโบ้ <span class="price">10</span> บาท</span></div>
+</div>
+
+<!-- ════ CART BAR ════ -->
+<div class="cart-bar">
+  <div class="cart-info">
+    <div class="cart-icon">🛒<span class="cart-count" id="cartCount">0</span></div>
+    <div class="cart-summary" id="cartSummary">ยังไม่มีรายการ</div>
+  </div>
+  <div class="cart-total" id="cartTotal">฿0</div>
+  <button class="btn-checkout" id="btnCheckout" onclick="openCart()" disabled>ดูตะกร้า</button>
+</div>
+
+<!-- ════ PRICE TABLE ════ -->
+<div class="section-title">📋 ตารางราคาทั้งหมด</div>
+<div class="price-table-wrap">
+  <table class="price-table">
+    <thead><tr><th>#</th><th>เมนู</th><th>ราคา</th><th>ไซส์</th></tr></thead>
+    <tbody>
+      <tr><td class="num-col">1</td><td>หนังกรอบไก่</td><td class="price-col">7 บาท</td><td class="size-col">ชิ้นเล็ก</td></tr>
+      <tr><td class="num-col">2</td><td>หนังกรอบหมู</td><td class="price-col">7 บาท</td><td class="size-col">ชิ้นเล็ก</td></tr>
+      <tr><td class="num-col">3</td><td>กะเพรา</td><td class="price-col">7 บาท</td><td class="size-col">ชิ้นเล็ก</td></tr>
+      <tr><td class="num-col">4</td><td>รมควันไก่ สอดไส้ชีส</td><td class="price-col">7 บาท</td><td class="size-col">ชิ้นเล็ก</td></tr>
+      <tr><td class="num-col">5</td><td>นมวนิลา สอดไส้ชีส</td><td class="price-col">7 บาท</td><td class="size-col">ชิ้นเล็ก</td></tr>
+      <tr><td class="num-col">6</td><td>จัมโบ้ชีส ⭐</td><td class="price-col">10 บาท</td><td class="size-col">จัมโบ้</td></tr>
+      <tr><td class="num-col">7</td><td>เวียนนารมควัน 🔥</td><td class="price-col">10 บาท</td><td class="size-col">จัมโบ้</td></tr>
+      <tr><td class="num-col">8</td><td>นมเบทาโกร</td><td class="price-col">10 บาท</td><td class="size-col">จัมโบ้</td></tr>
+      <tr><td class="num-col">9</td><td>หมูผสมไก่ เบทาโกร</td><td class="price-col">10 บาท</td><td class="size-col">จัมโบ้</td></tr>
+      <tr><td class="num-col">10</td><td>หนังไก่กรอบ TFG</td><td class="price-col">10 บาท</td><td class="size-col">จัมโบ้</td></tr>
+    </tbody>
+    <tfoot><tr class="tfoot-row"><td colspan="4">✅ ชิ้นเล็ก 3 ชิ้น = 20 บาท &nbsp;|&nbsp; 📦 ส่งถึงบ้าน 159/306</td></tr></tfoot>
+  </table>
+</div>
+
+<!-- ════ PRODUCT GRIDS ════ -->
+<div class="section-title">🍢 ไซส์เล็ก — 7 บาท (3 ชิ้น 20 บาท)</div>
+<div class="container">
+  <div class="grid-5" id="grid-small"></div>
+  <div class="section-title" style="padding-top:10px">🌭 ไซส์จัมโบ้ — 10 บาท</div>
+  <div class="grid-4" id="grid-jumbo"></div>
+</div>
+
+<!-- ════ FOOTER ════ -->
+<div class="footer">
+  <div class="contact-row">
+    <span>🏠 บ้านเลขที่ 159/306</span>
+    <span>📞 <a href="tel:0635096265">063-509-6265</a></span>
+  </div>
+  © 2026 สโมกกี้ไบร์ท | สั่งง่าย ส่งไว ถึงบ้านครับ
+</div>
+
+<!-- ════ LINE FAB ════ -->
+<a class="line-fab" href="https://line.me/ti/p/~YOUR_LINE_ID" target="_blank">💬</a>
+
+<!-- ════ TOAST ════ -->
+<div class="toast" id="toast"></div>
+
+<!-- ════ CART MODAL ════ -->
+<div class="modal-bg" id="modalBg" onclick="closeCartOutside(event)">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <div class="modal-head-icon">🛒</div>
+        <div>
+          <h2>ตะกร้าสินค้า</h2>
+          <div class="modal-head-sub" id="modalHeadSub">กำลังโหลด...</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-foot">
+      <button class="btn-line" id="btnLine" onclick="sendToLine()">
+        <span>💬</span>
+        <span>
+          สั่งผ่าน LINE ทันที!
+          <span class="btn-line-sub">กดเพื่อส่งออเดอร์ไปหาร้าน</span>
+        </span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<script src="main.js"></script>
+
+<!-- ════ HOW-TO POPUP ════ -->
+<div class="modal-bg" id="howToBg" onclick="if(event.target===this)closeHowTo()">
+  <div class="modal howto-modal">
+    <div class="modal-head">
+      <div class="modal-head-left">
+        <div class="modal-head-icon">📖</div>
+        <div>
+          <h2>วิธีกดสั่งสินค้า</h2>
+          <div class="modal-head-sub">ทำตามขั้นตอนง่ายๆ ได้เลยครับ</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeHowTo()">✕</button>
+    </div>
+    <div class="modal-body howto-body">
+      <div class="howto-step">
+        <div class="howto-num">1</div>
+        <div class="howto-content">
+          <div class="howto-title">🍢 เลือกเมนูที่ต้องการ</div>
+          <div class="howto-desc">เลื่อนดูเมนูทั้งหมด ทั้งไซส์เล็ก (7 บาท) และไซส์จัมโบ้ (10 บาท) แล้วกดปุ่ม <strong>+ / −</strong> เพื่อเลือกจำนวน</div>
+        </div>
+      </div>
+      <div class="howto-step">
+        <div class="howto-num">2</div>
+        <div class="howto-content">
+          <div class="howto-title">🛒 กด "เพิ่มลงตะกร้า"</div>
+          <div class="howto-desc">กดปุ่มสีส้ม <strong>"+ เพิ่มลงตะกร้า"</strong> ใต้เมนูที่ต้องการ สินค้าจะถูกเพิ่มเข้าตะกร้าทันที</div>
+        </div>
+      </div>
+      <div class="howto-step">
+        <div class="howto-num">3</div>
+        <div class="howto-content">
+          <div class="howto-title">🛒 กด "ดูตะกร้า" แถบด้านบน</div>
+          <div class="howto-desc">เมื่อเพิ่มสินค้าแล้ว กดปุ่ม <strong>"ดูตะกร้า"</strong> ที่แถบด้านบนสุดเพื่อตรวจสอบรายการสั่งซื้อ</div>
+        </div>
+      </div>
+      <div class="howto-step">
+        <div class="howto-num">4</div>
+        <div class="howto-content">
+          <div class="howto-title">🥫 เลือกซอส & ผัก</div>
+          <div class="howto-desc">เลือกซอสที่ชอบ (ซอสรวม / มายองเนส / มะเขือเทศ / ซอสพริก / ไม่รับซอส) และเลือกว่าใส่ผักหรือไม่ ใช้กับทุกเมนูในออเดอร์</div>
+        </div>
+      </div>
+      <div class="howto-step">
+        <div class="howto-num">5</div>
+        <div class="howto-content">
+          <div class="howto-title">📍 กรอกที่อยู่จัดส่ง</div>
+          <div class="howto-desc">กรอก <strong>บ้านเลขที่</strong> (จำเป็น) และ <strong>ซอย</strong> เพื่อให้ร้านนำส่งได้ถูกต้อง และใส่ <strong>หมายเหตุ</strong> หากมีข้อความพิเศษ</div>
+        </div>
+      </div>
+      <div class="howto-step howto-step-last">
+        <div class="howto-num howto-num-line">💬</div>
+        <div class="howto-content">
+          <div class="howto-title">สั่งผ่าน LINE ทันที!</div>
+          <div class="howto-desc">กดปุ่มสีเขียว <strong>"สั่งผ่าน LINE ทันที!"</strong> ระบบจะเปิด LINE พร้อมข้อความออเดอร์ให้อัตโนมัติ จากนั้น <strong>แชร์ไปยังกลุ่ม "เดอะมันนี่ รวมร้านอร่อย"</strong> เพื่อรายงานการสั่งมายังกลุ่มด้วยครับ 📢</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-line" onclick="closeHowTo()" style="background:linear-gradient(135deg,var(--fire),var(--fire2));">
+        <span>✅</span>
+        <span>เข้าใจแล้ว ไปสั่งเลย!</span>
+      </button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
