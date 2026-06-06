@@ -29,7 +29,7 @@ const jumboMenus = [
   { id: "j10", num: 10, name: "หนังไก่กรอบ TFG", price: 10 },
 ];
 
-/* ════ SAUCE OPTIONS (FIX: ประกาศ sauceVals ตรงนี้) ════ */
+/* ════ SAUCE OPTIONS ════ */
 const sauceVals = ["ซอสรวม", "มายองเนส", "มะเขือเทศ", "ซอสพริก", "ไม่รับซอส"];
 const sauceIcons = {
   "ซอสรวม": "🎉",
@@ -168,7 +168,7 @@ function closeCartOutside(e) {
   if (e.target === document.getElementById("modalBg")) closeCart();
 }
 
-/* ════ RENDER MODAL (FIX: ย้าย sauceVals / sauceBoxes ให้ประกาศก่อนใช้) ════ */
+/* ════ RENDER MODAL ════ */
 function renderModal() {
   const count = totalCount();
   const total = cartGrandTotal();
@@ -255,7 +255,7 @@ function renderModal() {
     </div>
   </div>`;
 
-  /* ── Sauce & Veg (FIX: สร้าง sauceBoxes ก่อนใช้ใน template) ── */
+  /* ── Sauce & Veg ── */
   const currentSauces = (globalSauce || "ซอสรวม").split("+");
   const sauceBoxes = sauceVals.map(sv => {
     const chk = currentSauces.includes(sv) ? "checked" : "";
@@ -361,17 +361,19 @@ function genOrderId() {
   return "SB-" + ts + rnd;
 }
 
-/* ════ SEND TO LINE ════ */
+/* ════ SEND TO LINE (FIX: แก้ syntax error ใน template literal) ════ */
 function sendToLine() {
   if (cart.length === 0) return;
   if (!validateForm()) { showToast("⚠️ กรุณากรอกบ้านเลขที่"); return; }
 
   const houseNo = document.getElementById("fldHouseNo").value.trim();
-  const soi = (document.getElementById("fldSoi") || {}).value?.trim() || "";
-  const note = (document.getElementById("fldNote") || {}).value?.trim() || "-";
+  const soiEl = document.getElementById("fldSoi");
+  const noteEl = document.getElementById("fldNote");
+  const soi = soiEl ? soiEl.value.trim() : "";
+  const note = (noteEl && noteEl.value.trim()) ? noteEl.value.trim() : "-";
   const total = cartGrandTotal();
   const count = totalCount();
-  const addrLine = soi ? `บ้านเลขที่ ${houseNo}  ซ.${soi}` : `บ้านเลขที่ ${houseNo}`;
+  const addrLine = soi ? "บ้านเลขที่ " + houseNo + "  ซ." + soi : "บ้านเลขที่ " + houseNo;
   const { date, time } = getThaiDateTime();
   const orderId = genOrderId();
 
@@ -383,45 +385,46 @@ function sendToLine() {
   const itemLines = cart.map((c, i) => {
     const sizeTag = c.price === 7 ? "[เล็ก]" : "[จัมโบ้]";
     const price = itemTotal(c);
-    return `  ${i + 1}. ${c.name} ${sizeTag}\n` +
-      `     ├ จำนวน : ${c.qty} ชิ้น\n` +
-      `     └ ราคา  : ฿${price}`;
+    return "  " + (i + 1) + ". " + c.name + " " + sizeTag + "\n" +
+      "     ├ จำนวน : " + c.qty + " ชิ้น\n" +
+      "     └ ราคา  : ฿" + price;
   }).join("\n" + D2 + "\n");
 
   let promoBlock = "";
   if (smallQtyTotal >= 3) {
-    promoBlock = `\n${D2}\n` +
-      `🎉 โปรชิ้นเล็ก\n` +
-      `   รวม ${smallQtyTotal} ชิ้น = ${Math.floor(smallQtyTotal / 3)}×20` +
-      (smallQtyTotal % 3 > 0 ? ` + ${smallQtyTotal % 3}×7` : "") + ` บาท`;
+    promoBlock = "\n" + D2 + "\n" +
+      "🎉 โปรชิ้นเล็ก\n" +
+      "   รวม " + smallQtyTotal + " ชิ้น = " + Math.floor(smallQtyTotal / 3) + "×20" +
+      (smallQtyTotal % 3 > 0 ? " + " + (smallQtyTotal % 3) + "×7" : "") + " บาท";
   }
 
-  const msg =
-    `@สโมกี้ไบร์ในตำนาน159/306
-${D1}
-🔥  ORDER RECEIPT  🔥
-${D1}
+  const siteUrl = "https://moneyme306.github.io/smoky-bite/";
 
-📅 วันที่    : ${date}
-🕐 เวลา     : ${time}
-${D1}
-📍 จัดส่งที่
-   ${addrLine}
-${D1}
-🍢 รายการสินค้า (${count} ชิ้น)
-${D2}
-${itemLines}${promoBlock}
-${D1}
-🥫 ซอส      : ${globalSauce}
-🥬 ผัก      : ${globalVeg}
-📝 หมายเหตุ  : ${note}
-${D1}
-💰 ยอดรวมสุทธิ : ฿${total} บาท
-${D1}
-🙏 ขอบคุณที่อุดหนุนสโมกกี้ไบร์ทครับ
-สนใจสั่งเพิ่มเติม กดเลย https://moneyme306.github.io/smoky-bite/${D1}`;
-${D1}(ไม่ต้องเป็นเพื่อนใน LINE ก็กดสั่งได้)
-${D1}`;
+  const msg = "@สโมกี้ไบร์ในตำนาน159/306\n" +
+    D1 + "\n" +
+    "🔥  ORDER RECEIPT  🔥\n" +
+    D1 + "\n" +
+    "📅 วันที่    : " + date + "\n" +
+    "🕐 เวลา     : " + time + "\n" +
+    D1 + "\n" +
+    "📍 จัดส่งที่\n" +
+    "   " + addrLine + "\n" +
+    D1 + "\n" +
+    "🍢 รายการสินค้า (" + count + " ชิ้น)\n" +
+    D2 + "\n" +
+    itemLines + promoBlock + "\n" +
+    D1 + "\n" +
+    "🥫 ซอส      : " + globalSauce + "\n" +
+    "🥬 ผัก      : " + globalVeg + "\n" +
+    "📝 หมายเหตุ  : " + note + "\n" +
+    D1 + "\n" +
+    "💰 ยอดรวมสุทธิ : ฿" + total + " บาท\n" +
+    D1 + "\n" +
+    "🙏 ขอบคุณที่อุดหนุนสโมกกี้ไบร์ทครับ\n" +
+    "สนใจสั่งเพิ่มเติม กดเลย " + siteUrl + "\n" +
+    D1 + "\n" +
+    "(ไม่ต้องเป็นเพื่อนใน LINE ก็กดสั่งได้)\n" +
+    D1;
 
   window.open("https://line.me/R/msg/text/?" + encodeURIComponent(msg), "_blank");
   showSuccess();
@@ -471,14 +474,14 @@ function shareToGroup() {
   const count = totalCount();
   const D1 = "━━━━━━━━━━━━━━━━━━━━━━";
   const groupMsg =
-`📢 มีออเดอร์ใหม่! สโมกกี้ไบร์ท 🔥
-${D1}
-🍢 จำนวน : ${count} ชิ้น
-💰 ยอดรวม : ฿${total} บาท
-📅 ${date}
-🕐 ${time}
-${D1}
-✅ ออเดอร์ถูกส่งไปยังร้านแล้วครับ`;
+    "📢 มีออเดอร์ใหม่! สโมกกี้ไบร์ท 🔥\n" +
+    D1 + "\n" +
+    "🍢 จำนวน : " + count + " ชิ้น\n" +
+    "💰 ยอดรวม : ฿" + total + " บาท\n" +
+    "📅 " + date + "\n" +
+    "🕐 " + time + "\n" +
+    D1 + "\n" +
+    "✅ ออเดอร์ถูกส่งไปยังร้านแล้วครับ";
   window.open("https://line.me/R/msg/text/?" + encodeURIComponent(groupMsg), "_blank");
 }
 
@@ -488,8 +491,7 @@ function openHowTo() {
 }
 function closeHowTo() {
   document.getElementById("howToBg").classList.remove("open");
-  /* FIX: safe localStorage สำหรับ iOS Private Mode */
-  try { localStorage.setItem("howto_seen", "1"); } catch (e) { /* ignore */ }
+  try { localStorage.setItem("howto_seen", "1"); } catch (e) { /* iOS private mode */ }
 }
 
 /* ════ AUTO-OPEN HOWTO ON FIRST VISIT ════ */
