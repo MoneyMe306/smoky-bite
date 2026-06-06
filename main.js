@@ -419,7 +419,8 @@ ${D1}
 💰 ยอดรวมสุทธิ : ฿${total} บาท
 ${D1}
 🙏 ขอบคุณที่อุดหนุนสโมกกี้ไบร์ทครับ
-สนใจสั่งเพิ่มเติม กดเลย https://moneyme306.github.io/smoky-bite/ (ไม่ต้องเป็นเพื่อนใน LINE ก็กดสั่งได้)
+สนใจสั่งเพิ่มเติม กดเลย https://moneyme306.github.io/smoky-bite/${D1}`;
+${D1}(ไม่ต้องเป็นเพื่อนใน LINE ก็กดสั่งได้)
 ${D1}`;
 
   window.open("https://line.me/R/msg/text/?" + encodeURIComponent(msg), "_blank");
