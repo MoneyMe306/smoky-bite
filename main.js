@@ -290,18 +290,18 @@ function renderModal() {
       <div class="field-row">
         <div class="field-wrap">
           <label class="field-label">บ้านเลขที่<span class="field-required">*</span></label>
-          <input class="field-input" id="fldHouseNo" type="text" placeholder="เช่น 159/306" maxlength="30">
+          <input class="field-input" id="fldHouseNo" type="text" placeholder="เช่น 306" maxlength="30">
           <span class="field-err">กรุณากรอกบ้านเลขที่</span>
         </div>
         <div class="field-wrap">
           <label class="field-label">ซอย</label>
-          <input class="field-input" id="fldSoi" type="text" placeholder="เช่น ซ.3" maxlength="60">
+          <input class="field-input" id="fldSoi" type="text" placeholder="เช่น 3" maxlength="60">
         </div>
       </div>
       <div class="field-row full">
         <div class="field-wrap">
           <label class="field-label">หมายเหตุ <span style="color:var(--muted);font-weight:400;text-transform:none;">(ถ้ามี)</span></label>
-          <input class="field-input" id="fldNote" type="text" placeholder="เช่น ไม่ต้องรีบ, วางหน้าประตูได้เลย..." maxlength="100">
+          <input class="field-input" id="fldNote" type="text" placeholder="เช่น วางหน้าบ้านได้เลย..." maxlength="100">
         </div>
       </div>
     </div>
@@ -401,7 +401,7 @@ function sendToLine() {
 ${D1}
 🔥  ORDER RECEIPT  🔥
 ${D1}
-🆔 ออเดอร์  : ${orderId}
+
 📅 วันที่    : ${date}
 🕐 เวลา     : ${time}
 ${D1}
@@ -419,7 +419,7 @@ ${D1}
 💰 ยอดรวมสุทธิ : ฿${total} บาท
 ${D1}
 🙏 ขอบคุณที่อุดหนุนสโมกกี้ไบร์ทครับ
-   รอยืนยันออเดอร์จากร้านสักครู่นะ 😊
+สนใจสั่งเพิ่มเติม กดเลย https://moneyme306.github.io/smoky-bite/ (ไม่ต้องเป็นเพื่อนใน LINE ก็กดสั่งได้)
 ${D1}`;
 
   window.open("https://line.me/R/msg/text/?" + encodeURIComponent(msg), "_blank");
